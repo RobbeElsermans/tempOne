@@ -1,6 +1,9 @@
 package com.model;
 
+import org.apache.catalina.User;
+
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BankModel {
     private HashMap<Integer, AccountModel> accounts;
@@ -16,8 +19,10 @@ public class BankModel {
         }
 
         //Check if no collisions
-        if( this.accounts.containsKey(user.getId()) )
-            return false;
+        for(AccountModel known : this.accounts.values()) {
+            if (known.getFullName().equals(user.toString()))
+                return false;
+        }
 
         //Add account
         accounts.put(user.getId(), new AccountModel(user));

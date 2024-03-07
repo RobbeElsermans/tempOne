@@ -25,7 +25,6 @@ public class BankController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Integer> createUser(@RequestBody UserModel user){
-		user.getId();
 		if (bankModel.createUser(user))
 		{
 			return new ResponseEntity<>(user.getId(), HttpStatus.CREATED);

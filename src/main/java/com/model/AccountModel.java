@@ -25,4 +25,7 @@ public class AccountModel {
         this.balance = this.balance - toBeWithdraw;
         return this.balance;
     }
+    public String getFullName(){
+        return this.user.toString();
+    }
 }
