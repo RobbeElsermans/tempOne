@@ -3,67 +3,66 @@ package com.model;
 import java.util.HashMap;
 
 public class BankModel {
-    private HashMap<String, Account> accounts;
+    private HashMap<Integer, AccountModel> accounts;
 
     public BankModel(){
         this.accounts = new HashMap<>();
     }
 
-    public boolean createUser(AccountName fullName){
-        if(fullName == null)
+    public boolean createUser(UserModel user){
+        if(user == null)
         {
             return false;
         }
 
-
         //Check if no collisions
-        if( this.accounts.containsKey(fullName.toString()) )
+        if( this.accounts.containsKey(user.getId()) )
             return false;
 
         //Add account
-        accounts.put(fullName.toString(), new Account(fullName));
+        accounts.put(user.getId(), new AccountModel(user));
 
         return true; //Error
     }
 
-    public double getUserBalance(AccountName fullName){
+    public double getUserBalance(int accountId){
 
-        if(fullName == null)
+        if(accountId == 0)
         {
             return -1;
         }
 
-        //Check if no existence
-        if(!this.accounts.containsKey(fullName.toString()) )
+        //Check if not existence
+        if(!this.accounts.containsKey(accountId) )
             return -1;
 
         //retrieve balance
-        return this.accounts.get(fullName.toString()).GetBalance();
+        return this.accounts.get(accountId).GetBalance();
     }
 
-    public double withdrawMoney(AccountName fullName, double amountOfMoney){
-        if(fullName == null)
+    public double withdrawMoney(int accountId , double amountOfMoney){
+        if(accountId == 0)
         {
             return -1;
         }
 
         //Check if no existence
-        if(!this.accounts.containsKey(fullName.toString()))
+        if(!this.accounts.containsKey(accountId))
             return -1;
 
-        return this.accounts.get(fullName.toString()).WithdrawMoney(amountOfMoney);
+        return this.accounts.get(accountId).WithdrawMoney(amountOfMoney);
     }
 
-    public double addMoney(AccountName fullName, double amountOfMoney){
-        if(fullName == null)
+    public double addMoney(int accountId, double amountOfMoney){
+        if(accountId == 0)
         {
             return -1;
         }
 
         //Check if no existence
-        if(!this.accounts.containsKey(fullName.toString()))
+        if(!this.accounts.containsKey(accountId))
             return -1;
 
-        return this.accounts.get(fullName.toString()).AddMoney(amountOfMoney);
+        return this.accounts.get(accountId).AddMoney(amountOfMoney);
     }
 }

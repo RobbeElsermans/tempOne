@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.model.AccountName;
+import com.model.UserModel;
 import com.model.BankModel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,11 +20,23 @@ public class BankController {
 		SpringApplication.run(BankController.class, args);
 	}
 
-	@GetMapping(value ="/balance",
+	@PostMapping(
+			value = "/users/create",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Double> getBalance(@RequestBody AccountName fullname) {
-		double balance = bankModel.getUserBalance(fullname);
+	public ResponseEntity<Integer> createUser(@RequestBody UserModel user){
+		user.getId();
+		if (bankModel.createUser(user))
+		{
+			return new ResponseEntity<>(user.getId(), HttpStatus.CREATED);
+		}
+
+		return new ResponseEntity<>(0, HttpStatus.CONFLICT);
+	}
+
+	@GetMapping(value ="/users/{id}/balance")
+	public ResponseEntity<Double> getBalance(@PathVariable(value = "id") int accountId) {
+		double balance = bankModel.getUserBalance(accountId);
 
 		if (balance < 0)
 			return new ResponseEntity<>(0.0, HttpStatus.BAD_REQUEST);
@@ -32,40 +44,18 @@ public class BankController {
 		return new ResponseEntity<>(balance, HttpStatus.OK);
 	}
 
-	@PostMapping(
-			value = "/create",
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Boolean> createUser(@RequestBody AccountName fullname){
-
-		if (bankModel.createUser(fullname))
-		{
-			return new ResponseEntity<>(true, HttpStatus.CREATED);
-		}
-
-		return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-	}
-
-	@PutMapping(
-			value = "/addmoney",
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE
-	)
-	public ResponseEntity<Boolean> addMoney(@RequestParam(name = "amount") double amount, @RequestBody AccountName fullName){
-		if(bankModel.addMoney(fullName, amount) == -1) {
+	@PutMapping(value = "/users/{id}/addmoney")
+	public ResponseEntity<Boolean> addMoney(@RequestParam(name = "amount") double amount, @PathVariable(name = "id") int accountId){
+		if(bankModel.addMoney(accountId, amount) == -1) {
 			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
-	@PutMapping(
-			value = "/removemoney",
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE
-	)
-	public ResponseEntity<Boolean> removeMoney(@RequestParam(name = "amount") double amount, @RequestBody AccountName fullName){
-		if(bankModel.withdrawMoney(fullName, amount) == -1) {
+	@PutMapping(value = "/users/{id}/removemoney")
+	public ResponseEntity<Boolean> removeMoney(@RequestParam(name = "amount") double amount, @PathVariable(name = "id") int accountId){
+		if(bankModel.withdrawMoney(accountId, amount) == -1) {
 			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 		}
 

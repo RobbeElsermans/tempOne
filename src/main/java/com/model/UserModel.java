@@ -1,12 +1,18 @@
 package com.model;
 
-public class AccountName {
+public class UserModel {
     private String firstName;
     private String lastName;
+    private int id;
 
-    public AccountName(String firstName, String lastName){
+    public UserModel(String firstName, String lastName){
         this.firstName = firstName;
         this.lastName = lastName;
+        this.id = (int) Math.floor(Math.random() * (1000 - 1 + 1) + 1);
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     @Override

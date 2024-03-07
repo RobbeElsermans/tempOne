@@ -1,11 +1,11 @@
 package com.model;
 
-public class Account {
+public class AccountModel {
 
-    private final AccountName fullName;
+    private final UserModel user;
     private double balance;
-    public Account(AccountName fullName){
-        this.fullName = fullName;
+    public AccountModel(UserModel user){
+        this.user = user;
 
         this.balance = 0.0;
     }
